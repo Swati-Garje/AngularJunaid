@@ -1,0 +1,56 @@
+<div class="jumbotron text-center" id="image-back">
+    <div class="container graph">
+      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+          <div class="item active">
+            <div >
+              <canvasjs-chart [options]="chartOptions" [styles]="{width: '90%', height:'360px'}" (chartInstance)="getChartInstance($event)"></canvasjs-chart>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <input class="details_date" type="date" [(ngModel)]="date" (change)="getDet()" max="{{date | date:'yyyy-MM-dd'}}">
+    <button class="button btn-graph" (click)="lineChart()">line graph</button>
+    <button class="button btn-graph" (click)="barChart()">bar graph</button>
+    <button class="button btn-graph" (click)="pieChart()">pie chart</button>
+  
+  </div>
+  
+
+  <div class="container" (load)="view()">
+    <!-- <input type="date" [(ngModel)]="date" (change)="getDet()" max="{{date | date:'yyyy-MM-dd'}}"> -->
+    <!-- <button></button> -->
+    <table class="table">
+      <thead>
+        <td>TIME</td>
+        <th>HIGH</th>
+        <th>LOW</th>
+        <th>VOLUME</th>
+        <th>OPEN PRICE</th>
+        <th>CLOSE PRICE</th>
+        <th>%CHANGE</th>
+        <button class="btn glyphicon glyphicon-refresh" (click)="refresh()"> </button>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of stockApi | paginate: {
+          itemsPerPage: change,
+          currentPage: pagination,
+          totalItems: stockApi.length
+        } ; index as i">
+          <td>{{item.datetime }}</td>
+          <td>{{item.high}}</td>
+          <td>{{item.low}}</td>
+          <td>{{item.volume}}</td>
+          <td>{{item.open}}</td>
+          <td>{{item.close}}</td>
+          <td [ngStyle]="{'color': (item.open<item.close) ? 'red' : 'green'}" ><b>{{item.open-item.close}}</b></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="pagination pagination_div" >
+      <pagination-controls
+        (pageChange)="getevent($event)">
+      </pagination-controls>
+    </div>
